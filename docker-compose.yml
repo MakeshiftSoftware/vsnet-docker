@@ -1,0 +1,61 @@
+version: "3"
+services:
+  vsnet-social:
+    container_name: "vsnet-social"
+    build:
+      context: ../vsnet-social
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../vsnet-social/src:/app/src
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - vs-social-pubsub
+    restart: always
+  vs-social-pubsub:
+    container_name: "vs-social-pubsub"
+    image: redis
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+    restart: always
+  vsnet-api:
+    container_name: "vsnet-api"
+    build:
+      context: ../vsnet-api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../vsnet-api/src:/app/src
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    restart: always
+  vsnet-auth:
+    container_name: "vsnet-auth"
+    build:
+      context: ../vsnet-auth
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../vsnet-auth/src:/app/src
+    expose:
+      - "8000"
+    ports:
+      - "8001:8000"
+    depends_on:
+        - vsnet-api
+    restart: always
+  postgres:
+    image: postgres:10.2-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_DB: makeshift
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
