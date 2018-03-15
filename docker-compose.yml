@@ -69,7 +69,7 @@ services:
         - vsnet-api
     restart: always
   postgres:
-    name: "vsnet-postgres"
+    container_name: "vsnet-postgres"
     image: postgres:10.2-alpine
     environment:
       POSTGRES_USER: user
