@@ -30,10 +30,10 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - vs-social-pubsub
+      - vsnet-social-pubsub
     restart: always
-  vs-social-pubsub:
-    container_name: "vs-social-pubsub"
+  vsnet-social-pubsub:
+    container_name: "vsnet-social-pubsub"
     image: redis
     expose:
       - "6379"
@@ -69,6 +69,7 @@ services:
         - vsnet-api
     restart: always
   postgres:
+    name: "vsnet-postgres"
     image: postgres:10.2-alpine
     environment:
       POSTGRES_USER: user
