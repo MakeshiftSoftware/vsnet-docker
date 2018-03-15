@@ -1,5 +1,23 @@
 version: "3"
 services:
+  vsnet-game:
+    container_name: "vsnet-game"
+    build:
+      context: ../vsnet-game
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../vsnet-game/src:/app/src
+    expose:
+      - "4000"
+      - "4001"
+      - "4002"
+      - "4003"
+    ports:
+      - "4000:4000"
+      - "4001:4001"
+      - "4002:4002"
+      - "4003:4003"
+    restart: always
   vsnet-social:
     container_name: "vsnet-social"
     build:
