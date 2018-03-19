@@ -1,23 +1,5 @@
 version: "3"
 services:
-  vsnet-game:
-    container_name: "vsnet-game"
-    build:
-      context: ../vsnet-game
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ../vsnet-game/src:/app/src
-    expose:
-      - "4000"
-      - "4001"
-      - "4002"
-      - "4003"
-    ports:
-      - "4000:4000"
-      - "4001:4001"
-      - "4002:4002"
-      - "4003:4003"
-    restart: always
   vsnet-social:
     container_name: "vsnet-social"
     build:
@@ -26,11 +8,16 @@ services:
     volumes:
       - ../vsnet-social/src:/app/src
     expose:
-      - "3000"
+      - "8080"
     ports:
-      - "3000:3000"
+      - "8080:8080"
     depends_on:
       - vsnet-social-pubsub
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - APP_SECRET=mysecret
+      - REDIS_PUBSUB_SERVICE=redis://vsnet-social-pubsub:6379
     restart: always
   vsnet-social-pubsub:
     container_name: "vsnet-social-pubsub"
@@ -48,11 +35,16 @@ services:
     volumes:
       - ../vsnet-api/src:/app/src
     expose:
-      - "8000"
+      - "8081"
     ports:
-      - "8000:8000"
+      - "8081:8081"
     depends_on:
       - postgres
+    environment:
+      - NODE_ENV=development
+      - PORT=8081
+      - APP_SECRET=mysecret
+      - DB=postgres://user@postgres/makeshift
     restart: always
   vsnet-auth:
     container_name: "vsnet-auth"
@@ -62,11 +54,16 @@ services:
     volumes:
       - ../vsnet-auth/src:/app/src
     expose:
-      - "8000"
+      - "8082"
     ports:
-      - "8001:8000"
+      - "8082:8082"
     depends_on:
         - vsnet-api
+    environment:
+      - NODE_ENV=development
+      - PORT=8082
+      - APP_SECRET=mysecret
+      - DB=postgres://user@postgres/makeshift
     restart: always
   postgres:
     container_name: "vsnet-postgres"

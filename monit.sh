@@ -1,1 +1,0 @@
-docker exec -it $1 pm2 monit
